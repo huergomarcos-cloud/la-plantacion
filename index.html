@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Plantación — Estructura de Negocio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1009;
+      --bg-card: #191b0e;
+      --bg-card-hover: #202416;
+      --green: #5a7c51;
+      --green-light: #7aad6e;
+      --earth: #9b7355;
+      --cream: #e8d5b0;
+      --gold: #c9a84c;
+      --text: #e0d8c8;
+      --text-2: #8a8070;
+      --text-3: #4a4840;
+      --border: #252818;
+      --header-from: #090c04;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; }
+
+    /* HEADER */
+    .header {
+      padding: 88px 40px 64px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--header-from) 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--green-light); margin-bottom: 20px;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(52px, 9vw, 104px);
+      font-weight: 400; color: var(--cream);
+      letter-spacing: -2px; line-height: 1; margin-bottom: 16px;
+    }
+    .header-sub { font-size: 15px; color: var(--text-2); margin-bottom: 48px; }
+    .stats { display: flex; justify-content: center; gap: 56px; flex-wrap: wrap; }
+    .stat-val { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--gold); display: block; }
+    .stat-lbl { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); margin-top: 2px; }
+
+    /* LAYOUT */
+    .section { max-width: 1120px; margin: 0 auto; padding: 80px 40px; }
+    .section-eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 400; color: var(--cream); margin-bottom: 48px; }
+    .divider { height: 1px; background: var(--border); max-width: 1120px; margin: 0 auto; }
+
+    /* SVG WRAPPER */
+    .predio-wrap {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px 28px 20px;
+    }
+    .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); }
+    .ldot { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+    /* BLOQUES GRID */
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 18px; }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 26px;
+      transition: border-color .2s, background .2s;
+    }
+    .card:hover { border-color: var(--green); background: var(--bg-card-hover); }
+    .bletter { font-family: 'Playfair Display', serif; font-size: 50px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+    .bname { font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 3px; }
+    .bdesc { font-size: 12px; color: var(--text-2); margin-bottom: 18px; }
+    .uso-list { list-style: none; margin-bottom: 18px; }
+    .uso-list li {
+      font-size: 12px; color: var(--text-2);
+      padding: 5px 0; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .uso-list li:last-child { border-bottom: none; }
+    .uso-ic { color: var(--green); flex-shrink: 0; font-size: 13px; }
+    .uso-ic.dim { color: var(--text-3); }
+
+    /* BADGES */
+    .badge {
+      display: inline-block; font-size: 10px; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 4px 10px;
+      border-radius: 20px; font-weight: 600;
+    }
+    .b-rent { background: rgba(90,124,81,.18); color: var(--green-light); border: 1px solid rgba(90,124,81,.35); }
+    .b-mgmt { background: rgba(201,168,76,.18); color: var(--gold); border: 1px solid rgba(201,168,76,.35); }
+    .b-jv   { background: rgba(155,115,85,.18); color: var(--earth); border: 1px solid rgba(155,115,85,.35); }
+    .b-own  { background: rgba(232,213,176,.08); color: var(--cream); border: 1px solid rgba(232,213,176,.18); }
+
+    /* PROS/CONTRAS */
+    .pc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .pc h4 { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
+    .pc.pros h4 { color: var(--green-light); }
+    .pc-contras h4 { color: #b06060; }
+    .pc ul { list-style: none; }
+    .pc ul li { font-size: 11px; color: var(--text-2); padding: 2px 0; }
+    .pc .pros ul li::before { content: "+ "; color: var(--green-light); }
+    .pc-contras ul li::before { content: "− "; color: #b06060; }
+
+    /* MODELOS */
+    .modelos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)); gap: 18px; }
+    .mcard {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 26px;
+      position: relative; overflow: hidden;
+    }
+    .mcard::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .mcard.m-rent::before { background: var(--green); }
+    .mcard.m-mgmt::before { background: var(--gold); }
+    .mcard.m-jv::before   { background: var(--earth); }
+    .mcard.m-hyb::before  { background: linear-gradient(90deg, var(--green), var(--earth)); }
+    .mnum { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+    .mtitle { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--cream); margin-bottom: 20px; }
+    .aportes h4, .cobro h4 {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 8px;
+    }
+    .arow {
+      display: flex; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid var(--border); gap: 10px;
+    }
+    .arow:last-child { border-bottom: none; }
+    .awho { font-size: 11px; font-weight: 600; min-width: 75px; flex-shrink: 0; }
+    .awho.n { color: var(--green-light); }
+    .awho.o { color: var(--gold); }
+    .awhat { font-size: 11px; color: var(--text-2); text-align: right; }
+    .cobro { background: rgba(255,255,255,.03); border-radius: 8px; padding: 14px; margin: 14px 0; }
+    .cval { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--gold); }
+    .cdet { font-size: 11px; color: var(--text-2); margin-top: 4px; }
+    .rr { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .rrb { background: rgba(255,255,255,.03); border-radius: 6px; padding: 10px 12px; }
+    .rrl { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-3); margin-bottom: 3px; }
+    .rrv { font-size: 12px; font-weight: 600; }
+    .rrv.lo { color: var(--green-light); }
+    .rrv.mi { color: var(--gold); }
+    .rrv.hi { color: #c07070; }
+    .rrv.va { color: var(--earth); }
+    .mnote { font-size: 11px; color: var(--text-2); margin-top: 14px; line-height: 1.5; }
+
+    /* TABLA */
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      padding: 14px 18px; font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-3);
+      border-bottom: 1px solid var(--border); text-align: center;
+    }
+    thead th:first-child { text-align: left; }
+    tbody td { padding: 13px 18px; text-align: center; color: var(--text-2); border-bottom: 1px solid var(--border); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody td:first-child { text-align: left; font-weight: 600; color: var(--text); }
+    .tlo { color: var(--green-light); font-weight: 600; }
+    .tmi { color: var(--gold); font-weight: 600; }
+    .thi { color: #c07070; font-weight: 600; }
+    .tva { color: var(--earth); font-weight: 600; }
+
+    /* TABS */
+    .tabs-bar {
+      display: flex; gap: 3px; margin-bottom: 24px;
+      background: var(--bg-card); padding: 4px;
+      border-radius: 10px; border: 1px solid var(--border); width: fit-content;
+    }
+    .tab {
+      padding: 9px 22px; background: none; border: none;
+      color: var(--text-2); font-size: 13px;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      border-radius: 8px; transition: all .2s;
+    }
+    .tab.on { background: var(--green); color: #fff; font-weight: 600; }
+    .tab-pane { display: none; }
+    .tab-pane.on { display: block; }
+    .etable { width: 100%; border-collapse: collapse; }
+    .etable th {
+      text-align: left; padding: 10px 14px;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-3); background: var(--bg-card);
+    }
+    .etable td { padding: 13px 14px; font-size: 13px; border-bottom: 1px solid var(--border); color: var(--text-2); }
+    .etable tr:last-child td { border-bottom: none; }
+    .bbadge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 6px;
+      font-weight: 700; font-size: 14px; margin-right: 8px;
+      vertical-align: middle;
+    }
+    .rec-box {
+      margin-top: 18px; padding: 16px;
+      background: rgba(90,124,81,.07); border: 1px solid rgba(90,124,81,.2);
+      border-radius: 8px;
+    }
+    .rec-box strong { font-size: 13px; color: var(--green-light); }
+    .rec-box p { font-size: 13px; color: var(--text-2); margin-top: 6px; line-height: 1.6; }
+
+    /* ROADMAP */
+    .road-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .rcard {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px;
+    }
+    .rcard.future { border-style: dashed; border-color: rgba(90,124,81,.25); }
+    .rphase { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+    .rtitle { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--cream); margin-bottom: 14px; }
+    .rcard.future .rtitle { color: #3a5435; }
+    .rlist { list-style: none; }
+    .rlist li { font-size: 12px; color: var(--text-2); padding: 5px 0; border-bottom: 1px solid var(--border); }
+    .rlist li:last-child { border-bottom: none; }
+    .rcard.future .rlist li { color: #3a5435; }
+    .rcard.future .rlist li::marker { color: #3a5435; }
+
+    /* MERCADO */
+    .mkt-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 48px; }
+    .mkt-stat {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 20px 22px;
+    }
+    .mkt-val { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+    .mkt-lbl { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+    .mkt-sub { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+    .mkt-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 32px; }
+    @media (max-width: 700px) { .mkt-cols { grid-template-columns: 1fr; } }
+    .mkt-block {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 22px;
+    }
+    .mkt-block h3 {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--green); margin-bottom: 14px;
+    }
+    .mkt-item { padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); }
+    .mkt-item:last-child { border-bottom: none; }
+    .mkt-item strong { color: var(--text); font-weight: 600; }
+    .zone-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 32px; }
+    @media (max-width: 700px) { .zone-row { grid-template-columns: 1fr; } }
+    .zone-tbl { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .zone-tbl table { font-size: 12px; }
+    .zone-tbl thead th { background: rgba(255,255,255,.02); font-size: 10px; }
+    .zone-tbl tbody td { padding: 11px 16px; }
+    .zone-tbl .highlight td { color: var(--gold); font-weight: 600; }
+    .mkt-callout {
+      background: rgba(90,124,81,.07); border: 1px solid rgba(90,124,81,.2);
+      border-radius: 10px; padding: 22px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .mkt-callout h3 { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+    .mkt-callout .big { font-family: 'Playfair Display', serif; font-size: 48px; color: var(--green-light); line-height: 1; margin-bottom: 8px; }
+    .mkt-callout p { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+    .sintesis-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+
+    /* GATE */
+    #pw-gate {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #090c04;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0;
+      padding: 40px 20px;
+    }
+    #pw-gate .gate-eye {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--green); margin-bottom: 20px;
+    }
+    #pw-gate h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 400; color: var(--cream);
+      letter-spacing: -2px; line-height: 1;
+      margin-bottom: 24px;
+    }
+    #pw-gate .gate-intro {
+      max-width: 480px; text-align: center;
+      font-size: 14px; color: var(--text-2);
+      line-height: 1.7; margin-bottom: 40px;
+    }
+    #pw-form { display: flex; gap: 10px; margin-bottom: 16px; }
+    #pw-input {
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text); padding: 11px 18px;
+      font-size: 14px; border-radius: 6px;
+      outline: none; width: 220px;
+      font-family: 'Inter', sans-serif;
+    }
+    #pw-input:focus { border-color: var(--green); }
+    #pw-btn {
+      background: var(--green); color: #fff;
+      font-weight: 600; font-size: 13px;
+      padding: 11px 20px; border: none;
+      border-radius: 6px; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+    }
+    #pw-btn:hover { background: var(--green-light); }
+    #pw-err { color: #c07070; font-size: 12px; min-height: 16px; text-align: center; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center; padding: 36px; color: var(--text-3);
+      font-size: 11px; border-top: 1px solid var(--border);
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 700px) {
+      .section { padding: 48px 20px; }
+      .header { padding: 56px 20px 44px; }
+      .stats { gap: 28px; }
+      .pc { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- GATE ──────────────────────────────────────── -->
+<div id="pw-gate">
+  <div class="gate-eye">Documento interno · Confidencial</div>
+  <h1>La Plantación</h1>
+  <div class="gate-intro">
+    Polo gastronómico, cultural y wellness en Villa Rosa, Partido del Pilar.<br>
+    Opciones de desarrollo por bloque, modelos de acuerdo y contexto de mercado.
+  </div>
+  <div id="pw-form">
+    <input id="pw-input" type="password" placeholder="Contraseña" autocomplete="off">
+    <button id="pw-btn">Entrar</button>
+  </div>
+  <div id="pw-err"></div>
+</div>
+
+<!-- HEADER ──────────────────────────────────────── -->
+<header class="header">
+  <div class="eyebrow">Villa Rosa · Partido del Pilar · Buenos Aires</div>
+  <h1>La Plantación</h1>
+  <div class="header-sub">Polo gastronómico · Cultural · Wellness</div>
+  <div class="stats">
+    <div>
+      <span class="stat-val">13.126 m²</span>
+      <span class="stat-lbl">Superficie total</span>
+    </div>
+    <div>
+      <span class="stat-val">5.477 m²</span>
+      <span class="stat-lbl">Polo activo (9D)</span>
+    </div>
+    <div>
+      <span class="stat-val">7.649 m²</span>
+      <span class="stat-lbl">Futuro residencial (9C)</span>
+    </div>
+    <div>
+      <span class="stat-val">5</span>
+      <span class="stat-lbl">Espacios</span>
+    </div>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+<!-- MERCADO ──────────────────────────────────────── -->
+<section class="section">
+  <div class="section-eyebrow">Contexto</div>
+  <div class="section-title">Diagnóstico de mercado</div>
+
+  <!-- KEY STATS -->
+  <div class="mkt-stats">
+    <div class="mkt-stat">
+      <div class="mkt-val">395k</div>
+      <div class="mkt-lbl">Habitantes en Pilar</div>
+      <div class="mkt-sub">Proyección: 420.000 para 2026</div>
+    </div>
+    <div class="mkt-stat">
+      <div class="mkt-val">+32%</div>
+      <div class="mkt-lbl">Crecimiento poblacional 2010–2022</div>
+      <div class="mkt-sub">Una de las tasas más altas de la Prov. de Bs. As.</div>
+    </div>
+    <div class="mkt-stat">
+      <div class="mkt-val">30</div>
+      <div class="mkt-lbl">Edad promedio — el municipio más joven del AMBA</div>
+      <div class="mkt-sub">Alto poder de consumo futuro</div>
+    </div>
+    <div class="mkt-stat">
+      <div class="mkt-val">+17,4%</div>
+      <div class="mkt-lbl">Crecimiento anual del valor m² residencial</div>
+      <div class="mkt-sub">Lidera todo el AMBA</div>
+    </div>
+  </div>
+
+  <!-- GASTRONOMÍA + REAL ESTATE -->
+  <div class="mkt-cols">
+    <div class="mkt-block">
+      <h3>Mercado gastronómico</h3>
+      <div class="mkt-item"><strong>56 locales nuevos</strong> en los últimos 2 años — 2 por mes</div>
+      <div class="mkt-item">90% son <strong>franquicias sin identidad</strong>: hamburgueserías, cadenas de café, delivery-friendly</div>
+      <div class="mkt-item">Señales de un consumidor exigente: cocina japonesa, peruana y árabe están apareciendo</div>
+      <div class="mkt-item"><strong>Las Palmas del Pilar Shopping:</strong> 650.000 visitas/mes, 154 locales — propuesta 100% genérica, sin curatoría ni experiencia</div>
+      <div class="mkt-item"><strong>Vacío real:</strong> nadie está haciendo polo integrado gastronomía + wellness + cultural bajo un mismo concepto</div>
+    </div>
+    <div class="mkt-block">
+      <h3>Real estate — corredor Panamericana</h3>
+      <div class="mkt-item">Departamentos: <strong>USD 1.624/m²</strong> (nov 2025, +3,6% interanual)</div>
+      <div class="mkt-item">Lotes en barrios cerrados: <strong>existen desde USD 70.000</strong> (800–900 m²)</div>
+      <div class="mkt-item">Terrenos comerciales sobre Panamericana: el más económico relevado fue <strong>USD 2.400.000 por 10.000 m²</strong></div>
+      <div class="mkt-item"><strong>+200 hectáreas</strong> reclasificadas de rural a comercial/media densidad en el corredor</div>
+      <div class="mkt-item"><strong>Grupo Coria:</strong> USD 1.000M comprometidos en zona norte (USD 53M ya ejecutados, USD 45M adicionales en 2026)</div>
+    </div>
+  </div>
+
+  <!-- TABLA DE ZONAS + EFECTO MULTIPLICADOR -->
+  <div class="zone-row">
+    <div class="zone-tbl">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left">Zona</th>
+            <th>Variación anual (casas, USD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td><strong>Pilar</strong></td>
+            <td><strong>+17,4%</strong></td>
+          </tr>
+          <tr>
+            <td>Nordelta / Tigre</td>
+            <td>+15%</td>
+          </tr>
+          <tr>
+            <td>CABA promedio</td>
+            <td>+8–10%</td>
+          </tr>
+          <tr>
+            <td>GBA Norte promedio</td>
+            <td>+7,6%</td>
+          </tr>
+          <tr>
+            <td>San Isidro</td>
+            <td>+2,1%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mkt-callout">
+      <h3>Efecto multiplicador</h3>
+      <div class="big">+15–20%</div>
+      <p>Sobreprecio documentado en propiedades adyacentes a un polo gastronómico + wellness de nivel. El polo no solo genera caja — le agrega valor a todo lo que esté alrededor.<br><br>Referencias: El Poblado (Medellín), Usaquén (Bogotá), Palermo (Buenos Aires).</p>
+    </div>
+  </div>
+
+  <!-- SÍNTESIS -->
+  <div class="sintesis-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align:left">Variable</th>
+          <th style="text-align:left">Estado actual</th>
+          <th style="text-align:left">Tendencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Población Pilar</td>
+          <td style="color:var(--text-2)">395k hab, edad prom 30 años</td>
+          <td style="color:var(--green-light)">Creciendo al 2–3% anual</td>
+        </tr>
+        <tr>
+          <td>Gastronomía en zona</td>
+          <td style="color:var(--text-2)">56 nuevos en 2 años, 90% franquicias</td>
+          <td style="color:var(--gold)">Crecimiento sin diferenciación</td>
+        </tr>
+        <tr>
+          <td>Competencia directa</td>
+          <td style="color:var(--text-2)">Las Palmas (650k visitas/mes, genérico)</td>
+          <td style="color:var(--gold)">Sin movimiento estratégico</td>
+        </tr>
+        <tr>
+          <td>Valor m² residencial</td>
+          <td style="color:var(--text-2)">USD 1.624 deptos / lotes desde USD 70k</td>
+          <td style="color:var(--green-light)">+17,4% anual — mejor del AMBA</td>
+        </tr>
+        <tr>
+          <td>Inversión privada en zona</td>
+          <td style="color:var(--text-2)">USD 1.000M comprometidos (Grupo Coria)</td>
+          <td style="color:var(--green-light)">Acelera en 2026</td>
+        </tr>
+        <tr>
+          <td>Corredor Panamericana</td>
+          <td style="color:var(--text-2)">200+ has reclasificadas de rural a comercial</td>
+          <td style="color:var(--green-light)">Corredor en formación</td>
+        </tr>
+        <tr>
+          <td>Impacto polo en residencial</td>
+          <td style="color:var(--text-2)">+15–20% sobreprecio documentado</td>
+          <td style="color:var(--green-light)">Oportunidad sin explotar en Pilar</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BLOQUES ──────────────────────────────────────── -->
+<section class="section">
+  <div class="section-eyebrow">Espacios</div>
+  <div class="section-title">Los bloques disponibles</div>
+
+  <div class="grid-4">
+
+    <!-- A -->
+    <div class="card">
+      <div class="bletter" style="color:#5a7c51">A</div>
+      <div class="bname">Edificio Principal</div>
+      <div class="bdesc">Construcción existente · 2 pisos · 2 alas</div>
+      <ul class="uso-list">
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Ala 1 — Restaurante comfort food</div>
+            <div style="font-size:11px;color:var(--text-2)">Buena cocina del día a día. Comfort food de calidad. Operación diurna y vespertina.</div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Ala 2 — Café de especialidad</div>
+            <div style="font-size:11px;color:var(--text-2)">Café specialty con espacio para trabajar y reuniones. Buena pastelería. Flujo de mañana a tarde.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- B -->
+    <div class="card">
+      <div class="bletter" style="color:#c9a84c">B</div>
+      <div class="bname">Restaurante existente</div>
+      <div class="bdesc">Cocina + 2 alas · patio interno</div>
+      <ul class="uso-list">
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Ala 1 — Restaurante nocturno</div>
+            <div style="font-size:11px;color:var(--text-2)">Alta calidad, ticket alto. Apuntado a la noche. Experiencia gastronómica diferenciada.</div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Ala 2 — Bar de alta coctelería</div>
+            <div style="font-size:11px;color:var(--text-2)">Bar con propuesta seria de coctelería. Puede funcionar como complemento o concepto independiente.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- C -->
+    <div class="card">
+      <div class="bletter" style="color:#9b7355">C</div>
+      <div class="bname">Casita</div>
+      <div class="bdesc">Espacio pequeño · Concepto exclusivo</div>
+      <ul class="uso-list">
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Sushi / Omakase</div>
+            <div style="font-size:11px;color:var(--text-2)">Muy pocas personas. Reserva previa obligatoria. Experiencia íntima de alto ticket. Marca propia o chef externo.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- D -->
+    <div class="card">
+      <div class="bletter" style="color:#4a8a41">D</div>
+      <div class="bname">Terreno Trasero</div>
+      <div class="bdesc">Wellness · Deportivo · Eventual desarrollo residencial</div>
+      <ul class="uso-list">
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Wellness center</div>
+            <div style="font-size:11px;color:var(--text-2)">Sauna · Piletas heladas · Baños de contraste · Terapias de recuperación</div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Cancha deportiva</div>
+            <div style="font-size:11px;color:var(--text-2)">Posibilidad de cancha de pádel u otra actividad deportiva.</div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Eventual desarrollo residencial</div>
+            <div style="font-size:11px;color:var(--text-2)">Las instalaciones de wellness y deporte se construyen pensando en convertirse en las amenities de las viviendas futuras.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- E — USO GENERAL -->
+    <div class="card" style="border-color:rgba(201,168,76,.25)">
+      <div class="bletter" style="color:#c9a84c">E</div>
+      <div class="bname">Uso general del lugar</div>
+      <div class="bdesc">Operado internamente · Todo el predio disponible</div>
+      <ul class="uso-list">
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Eventos corporativos</div>
+            <div style="font-size:11px;color:var(--text-2)">Uso del predio completo para empresas. Jornadas, team building, lanzamientos.</div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Eventos privados</div>
+            <div style="font-size:11px;color:var(--text-2)">Cumpleaños, casamientos, celebraciones. Uso exclusivo del espacio.</div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--cream);margin-bottom:2px">Activaciones de marcas</div>
+            <div style="font-size:11px;color:var(--text-2)">El predio como escenario para activaciones BTL, experiencias de marca y pop-ups.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MODELOS ──────────────────────────────────────── -->
+<section class="section">
+  <div class="section-eyebrow">Estructura legal y financiera</div>
+  <div class="section-title">Modelos de acuerdo posibles</div>
+
+  <div class="modelos-grid">
+
+    <!-- ALQUILER -->
+    <div class="mcard m-rent">
+      <div class="mnum">Modelo 01</div>
+      <div class="mtitle">Alquiler</div>
+      <div class="aportes">
+        <h4>Quién pone qué</h4>
+        <div class="arow">
+          <span class="awho n">Nosotros</span>
+          <span class="awhat">Terreno + obra + instalaciones + cocina base + habilitaciones</span>
+        </div>
+        <div class="arow">
+          <span class="awho o">Operador</span>
+          <span class="awhat">Decoración + equipamiento + staff + branding + capital de trabajo</span>
+        </div>
+      </div>
+      <div class="cobro">
+        <h4>Estructura de cobro</h4>
+        <div class="cval">USD XXX / mes</div>
+        <div class="cdet">+ X% sobre ventas por encima de cierto umbral</div>
+        <div class="cdet" style="margin-top:5px;font-style:italic">O: variable puro (% ventas solamente)</div>
+      </div>
+      <div class="rr">
+        <div class="rrb"><div class="rrl">Riesgo</div><div class="rrv lo">BAJO</div></div>
+        <div class="rrb"><div class="rrl">Retorno</div><div class="rrv mi">MODERADO</div></div>
+        <div class="rrb"><div class="rrl">Control</div><div class="rrv hi">BAJO</div></div>
+        <div class="rrb"><div class="rrl">Alineación</div><div class="rrv mi">MEDIA</div></div>
+      </div>
+      <p class="mnote">El más pasivo. Ideal para bloques donde no tenemos know-how específico: café, pádel, co-working.</p>
+    </div>
+
+    <!-- MANAGEMENT -->
+    <div class="mcard m-mgmt">
+      <div class="mnum">Modelo 02</div>
+      <div class="mtitle">Management Agreement</div>
+      <div class="aportes">
+        <h4>Quién pone qué</h4>
+        <div class="arow">
+          <span class="awho n">Nosotros</span>
+          <span class="awhat">Financiamos TODO. Somos dueños del negocio.</span>
+        </div>
+        <div class="arow">
+          <span class="awho o">Operador</span>
+          <span class="awhat">Know-how + marca + chef + management + operación diaria</span>
+        </div>
+      </div>
+      <div class="cobro">
+        <h4>Cobro del operador (fee)</h4>
+        <div class="cval">X% ventas brutas</div>
+        <div class="cdet">+ X% del EBITDA como incentivo</div>
+        <div class="cdet" style="margin-top:5px;font-style:italic">Referencia de mercado: 5–8% gross + 10–15% EBITDA</div>
+      </div>
+      <div class="rr">
+        <div class="rrb"><div class="rrl">Riesgo</div><div class="rrv hi">ALTO</div></div>
+        <div class="rrb"><div class="rrl">Retorno</div><div class="rrv lo">ALTO</div></div>
+        <div class="rrb"><div class="rrl">Control</div><div class="rrv lo">ALTO</div></div>
+        <div class="rrb"><div class="rrl">Alineación</div><div class="rrv mi">MEDIA</div></div>
+      </div>
+      <p class="mnote">Modelo Nobu / StreetXO / Faena. Ideal si traemos un operador gastronómico de nombre para el Bloque B.</p>
+    </div>
+
+    <!-- JV -->
+    <div class="mcard m-jv">
+      <div class="mnum">Modelo 03</div>
+      <div class="mtitle">Joint Venture</div>
+      <div class="aportes">
+        <h4>Quién pone qué</h4>
+        <div class="arow">
+          <span class="awho n">Nosotros</span>
+          <span class="awhat">Terreno + construcción → 70% del equity</span>
+        </div>
+        <div class="arow">
+          <span class="awho o">Operador</span>
+          <span class="awhat">Marca + operación + diseño + equipo → 30% del equity</span>
+        </div>
+      </div>
+      <div class="cobro">
+        <h4>Distribución de resultados</h4>
+        <div class="cval">70 / 30</div>
+        <div class="cdet">Split típico capital (nosotros) vs. know-how (operador)</div>
+        <div class="cdet" style="margin-top:5px;font-style:italic">El operador puede "ganar equity" si el negocio crece</div>
+      </div>
+      <div class="rr">
+        <div class="rrb"><div class="rrl">Riesgo</div><div class="rrv mi">MEDIO</div></div>
+        <div class="rrb"><div class="rrl">Retorno</div><div class="rrv lo">ALTO</div></div>
+        <div class="rrb"><div class="rrl">Control</div><div class="rrv mi">COMPARTIDO</div></div>
+        <div class="rrb"><div class="rrl">Alineación</div><div class="rrv lo">MUY ALTA</div></div>
+      </div>
+      <p class="mnote">Ideal cuando el operador es excelente pero no tiene capital. Mayor alineación de incentivos. Más complejidad societaria.</p>
+    </div>
+
+    <!-- HIBRIDO -->
+    <div class="mcard m-hyb">
+      <div class="mnum">Modelo 04</div>
+      <div class="mtitle">Híbrido</div>
+      <div class="aportes">
+        <h4>Quién pone qué</h4>
+        <div class="arow">
+          <span class="awho n">Nosotros</span>
+          <span class="awhat">Tierra + arquitectura + construcción + instalaciones base</span>
+        </div>
+        <div class="arow">
+          <span class="awho o">Operador</span>
+          <span class="awhat">Interiorismo + cocina final + equipamiento + branding</span>
+        </div>
+      </div>
+      <div class="cobro">
+        <h4>3 variantes posibles</h4>
+        <div class="cdet" style="margin-bottom:6px"><strong style="color:var(--cream)">A —</strong> Operador pone CAPEX → paga alquiler reducido</div>
+        <div class="cdet" style="margin-bottom:6px"><strong style="color:var(--cream)">B —</strong> Nosotros ponemos CAPEX → cobramos alquiler mayor</div>
+        <div class="cdet"><strong style="color:var(--cream)">C —</strong> Operador amortiza su inversión vía descuento de alquiler por X años</div>
+      </div>
+      <div class="rr">
+        <div class="rrb"><div class="rrl">Riesgo</div><div class="rrv va">VARIABLE</div></div>
+        <div class="rrb"><div class="rrl">Retorno</div><div class="rrv va">NEGOCIABLE</div></div>
+        <div class="rrb"><div class="rrl">Control</div><div class="rrv va">PARCIAL</div></div>
+        <div class="rrb"><div class="rrl">Alineación</div><div class="rrv mi">MEDIA-ALTA</div></div>
+      </div>
+      <p class="mnote">El más frecuente en proyectos boutique. Flexible en la negociación. Permite atraer buenas marcas sin cederles el local.</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TABLA COMPARATIVA ──────────────────────────── -->
+<section class="section">
+  <div class="section-eyebrow">Comparativa</div>
+  <div class="section-title">Modelos frente a frente</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:200px">Criterio</th>
+          <th><span style="color:var(--green-light)">Alquiler</span></th>
+          <th><span style="color:var(--gold)">Management</span></th>
+          <th><span style="color:var(--earth)">Joint Venture</span></th>
+          <th><span style="color:var(--cream)">Híbrido</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Capital nuestro</td>
+          <td class="tmi">Construcción</td>
+          <td class="thi">CAPEX total</td>
+          <td class="tmi">Construcción</td>
+          <td class="tmi">Estructura base</td>
+        </tr>
+        <tr>
+          <td>Riesgo operativo</td>
+          <td class="tlo">Bajo</td>
+          <td class="thi">Alto</td>
+          <td class="tmi">Compartido</td>
+          <td class="tva">Variable</td>
+        </tr>
+        <tr>
+          <td>Control del negocio</td>
+          <td class="thi">Bajo</td>
+          <td class="tlo">Alto</td>
+          <td class="tmi">Compartido</td>
+          <td class="tmi">Parcial</td>
+        </tr>
+        <tr>
+          <td>Retorno potencial</td>
+          <td class="tmi">Moderado</td>
+          <td class="tlo">Alto</td>
+          <td class="tlo">Muy alto</td>
+          <td class="tva">Negociable</td>
+        </tr>
+        <tr>
+          <td>Velocidad de arranque</td>
+          <td class="tlo">Rápida</td>
+          <td class="tmi">Media</td>
+          <td class="thi">Lenta</td>
+          <td class="tmi">Media</td>
+        </tr>
+        <tr>
+          <td>Alineación del operador</td>
+          <td class="tmi">Media</td>
+          <td class="tmi">Media</td>
+          <td class="tlo">Muy alta</td>
+          <td class="tmi">Media-alta</td>
+        </tr>
+        <tr>
+          <td>Complejidad legal</td>
+          <td class="tlo">Baja</td>
+          <td class="tmi">Media</td>
+          <td class="thi">Alta</td>
+          <td class="tmi">Media</td>
+        </tr>
+        <tr>
+          <td>Bloques sugeridos</td>
+          <td style="color:var(--text-2)">C, D</td>
+          <td style="color:var(--text-2)">B (gastro)</td>
+          <td style="color:var(--text-2)">B si operador es excepcional</td>
+          <td style="color:var(--text-2)">A, D</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ESCENARIOS ──────────────────────────────────── -->
+<section class="section">
+  <div class="section-eyebrow">Tenant mix</div>
+  <div class="section-title">Escenarios para el polo</div>
+
+  <div class="tabs-bar">
+    <button class="tab on" onclick="showTab(event,'cons')">Conservador</button>
+    <button class="tab" onclick="showTab(event,'full')">Full</button>
+    <button class="tab" onclick="showTab(event,'hyb')">Híbrido ★</button>
+  </div>
+
+  <!-- CONSERVADOR -->
+  <div id="tab-cons" class="tab-pane on">
+    <p style="margin-bottom:18px;color:var(--text-2);font-size:13px">Arranque rápido con menor inversión inicial. Se priorizan bloques con operadores externos para minimizar el riesgo operativo propio.</p>
+    <table class="etable">
+      <thead><tr><th>Bloque</th><th>Concepto</th><th>Operador</th><th>Modelo</th><th>Inversión</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(90,124,81,.2);color:#7aad6e">A</span></td>
+          <td>Restaurante comfort food + café specialty</td><td>Marca propia o MA</td>
+          <td><span class="badge b-mgmt">Management</span></td><td style="color:var(--gold)">Media</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(201,168,76,.2);color:#e8c56a">B</span></td>
+          <td>Restaurante nocturno + bar coctelería</td><td>Operador externo (MA)</td>
+          <td><span class="badge b-mgmt">Management</span></td><td style="color:var(--gold)">Media</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(155,115,85,.2);color:#c49a6e">C</span></td>
+          <td>Sushi / omakase</td><td>Chef externo (MA)</td>
+          <td><span class="badge b-mgmt">Management</span></td><td style="color:var(--green-light)">Baja</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(74,103,65,.2);color:#5a8a50">D</span></td>
+          <td>Wellness center + pádel</td><td>Operador externo</td>
+          <td><span class="badge b-rent">Alquiler</span></td><td style="color:var(--gold)">Media</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FULL -->
+  <div id="tab-full" class="tab-pane">
+    <p style="margin-bottom:18px;color:var(--text-2);font-size:13px">Todo bajo marca propia. Mayor control e identidad del polo, mayor inversión y tiempo de arranque.</p>
+    <table class="etable">
+      <thead><tr><th>Bloque</th><th>Concepto</th><th>Operador</th><th>Modelo</th><th>Inversión</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(90,124,81,.2);color:#7aad6e">A</span></td>
+          <td>Restaurante comfort food + café specialty</td><td>Marca propia</td>
+          <td><span class="badge b-own">Marca propia</span></td><td style="color:var(--gold)">Media</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(201,168,76,.2);color:#e8c56a">B</span></td>
+          <td>Restaurante nocturno + bar coctelería</td><td>Marca propia</td>
+          <td><span class="badge b-own">Marca propia</span></td><td style="color:#c07070">Alta</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(155,115,85,.2);color:#c49a6e">C</span></td>
+          <td>Sushi / omakase</td><td>Marca propia</td>
+          <td><span class="badge b-own">Marca propia</span></td><td style="color:var(--green-light)">Baja</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(74,103,65,.2);color:#5a8a50">D</span></td>
+          <td>Wellness center + pádel</td><td>Marca propia + operador deportivo</td>
+          <td><span class="badge b-own">Marca propia / Alquiler</span></td><td style="color:var(--gold)">Media</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HIBRIDO ★ -->
+  <div id="tab-hyb" class="tab-pane">
+    <p style="margin-bottom:18px;color:var(--text-2);font-size:13px">Balance entre control e inversión. Algunos bloques con marca propia para definir identidad; otros con operadores externos para acelerar el arranque.</p>
+    <table class="etable">
+      <thead><tr><th>Bloque</th><th>Concepto</th><th>Operador</th><th>Modelo</th><th>Inversión</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(90,124,81,.2);color:#7aad6e">A</span></td>
+          <td>Restaurante comfort food + café specialty</td><td>Marca propia</td>
+          <td><span class="badge b-own">Marca propia</span></td><td style="color:var(--gold)">Media</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(201,168,76,.2);color:#e8c56a">B</span></td>
+          <td>Restaurante nocturno + bar coctelería</td><td>Operador externo (MA)</td>
+          <td><span class="badge b-mgmt">Management</span></td><td style="color:var(--gold)">Media</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(155,115,85,.2);color:#c49a6e">C</span></td>
+          <td>Sushi / omakase</td><td>Chef externo (MA)</td>
+          <td><span class="badge b-mgmt">Management</span></td><td style="color:var(--green-light)">Baja</td>
+        </tr>
+        <tr>
+          <td><span class="bbadge" style="background:rgba(74,103,65,.2);color:#5a8a50">D</span></td>
+          <td>Wellness center + pádel</td><td>Operador externo</td>
+          <td><span class="badge b-rent">Alquiler</span></td><td style="color:var(--gold)">Media</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROADMAP ──────────────────────────────────────── -->
+<section class="section">
+  <div class="section-eyebrow">Próximos pasos</div>
+  <div class="section-title">Roadmap</div>
+
+  <div class="road-grid">
+    <div class="rcard">
+      <div class="rphase" style="color:var(--green)">Fase 0</div>
+      <div class="rtitle">Due diligence</div>
+      <ul class="rlist">
+        <li>☐ Relevamiento físico (m², estado, fotos)</li>
+        <li>☐ Reunión con el grupo inversor — alinear visión</li>
+        <li>☐ Confirmar timing de compra del predio</li>
+        <li>☐ Definir presupuesto de refacción disponible</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <div class="rphase" style="color:var(--earth)">Fase 1 · 1–2 meses</div>
+      <div class="rtitle">Diseño del polo</div>
+      <ul class="rlist">
+        <li>☐ Definir concepto y operador por bloque</li>
+        <li>☐ Sondear operadores externos (pádel, café, etc.)</li>
+        <li>☐ Diseñar Management Agreements</li>
+        <li>☐ Contratar arquitecto (evaluación + proyección)</li>
+        <li>☐ Proyección financiera por bloque (CAPEX + revenue)</li>
+      </ul>
+    </div>
+    <div class="rcard">
+      <div class="rphase" style="color:var(--gold)">Fase 2 · 3–6 meses</div>
+      <div class="rtitle">Apertura</div>
+      <ul class="rlist">
+        <li>☐ Refacciones por bloque (menor a mayor inversión)</li>
+        <li>☐ Firmar acuerdos con operadores</li>
+        <li>☐ Contratar equipo para bloques propios</li>
+        <li>☐ Soft opening Bloque B (gastronómico)</li>
+        <li>☐ Apertura progresiva del resto</li>
+      </ul>
+    </div>
+    <div class="rcard future">
+      <div class="rphase" style="color:#3a5435">Fase 3 · Largo plazo</div>
+      <div class="rtitle">Master plan residencial</div>
+      <ul class="rlist">
+        <li>☐ Bloque D diseñado como amenity futura</li>
+        <li>☐ Polo como track record para el residencial</li>
+        <li>☐ Explorar JV con desarrolladora</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  La Plantación · Villa Rosa, Partido del Pilar · Documento de trabajo interno · 2026
+</footer>
+
+<script>
+  function showTab(e, id) {
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('on'));
+    document.getElementById('tab-' + id).classList.add('on');
+    e.currentTarget.classList.add('on');
+  }
+
+  (function(){
+    const gate = document.getElementById('pw-gate');
+    const input = document.getElementById('pw-input');
+    const btn = document.getElementById('pw-btn');
+    const err = document.getElementById('pw-err');
+    if(sessionStorage.getItem('plantacion_ok')==='1') gate.style.display='none';
+    function check(){
+      if(input.value==='marcos123'){
+        sessionStorage.setItem('plantacion_ok','1');
+        gate.style.display='none';
+      } else {
+        err.textContent='Contraseña incorrecta.';
+        input.value=''; input.focus();
+      }
+    }
+    btn.addEventListener('click', check);
+    input.addEventListener('keydown', e=>{ if(e.key==='Enter') check(); });
+  })();
+</script>
+
+</body>
+</html>
