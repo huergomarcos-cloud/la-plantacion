@@ -710,32 +710,33 @@
   <div class="section-title">Qué puede ser cada espacio</div>
 
   <style>
-    .ref-group { margin-bottom: 48px; }
+    .ref-group { margin-bottom: 56px; }
     .ref-group-title {
       font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
       color: var(--green); margin-bottom: 20px; padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
     }
-    .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); gap: 24px; }
     .ref-card {
       background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 10px; overflow: hidden;
+      border-radius: 12px; overflow: hidden;
     }
-    .ref-img {
-      width: 100%; height: 180px; object-fit: cover; display: block;
+    .ref-photos {
+      display: grid; grid-template-columns: 1fr 1fr;
+      grid-template-rows: 200px 200px; gap: 2px;
+    }
+    .ref-photo {
       background: var(--bg-card-hover);
-    }
-    .ref-img-placeholder {
-      width: 100%; height: 180px; background: var(--bg-card-hover);
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; color: var(--text-3); letter-spacing: 1px;
+      font-size: 10px; color: var(--text-3); letter-spacing: 1px;
+      overflow: hidden;
     }
-    .ref-body { padding: 16px; }
+    .ref-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ref-body { padding: 20px 22px; }
     .ref-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
-    .ref-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-    .ref-desc { font-size: 12px; color: var(--text-2); line-height: 1.6; }
-    .ref-ejemplos { font-size: 11px; color: var(--text-3); margin-top: 8px; font-style: italic; }
-    @media (max-width: 700px) { .ref-grid { grid-template-columns: 1fr; } }
+    .ref-name { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 10px; font-family: 'Playfair Display', serif; }
+    .ref-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; }
+    @media (max-width: 700px) { .ref-grid { grid-template-columns: 1fr; } .ref-photos { grid-template-rows: 160px 160px; } }
   </style>
 
   <!-- BLOQUE A -->
@@ -743,30 +744,42 @@
     <div class="ref-group-title">Bloque A — Edificio Principal</div>
     <div class="ref-grid">
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Comfort Food ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Alternativa 1</div>
           <div class="ref-name">Restaurante de comfort food</div>
           <div class="ref-desc">Cocina del día a día ejecutada con nivel. Almuerzo y cena, carta accesible pero con producto de calidad. El lugar donde el vecino de Pilar viene dos veces por semana sin pensarlo.</div>
-          <div class="ref-ejemplos">Ref: Crizia, El Preferido de Palermo, Sacro</div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Café + Cowork ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Alternativa 2</div>
           <div class="ref-name">Café de especialidad + espacio de trabajo</div>
           <div class="ref-desc">Café de autor con sala de reuniones y membership. Pago mensual por acceso: escritorios, wifi, salas, café ilimitado. Captura al profesional independiente y al ejecutivo del barrio que necesita salir de casa.</div>
-          <div class="ref-ejemplos">Ref: Fetcher Café, Lattente, Buenos Aires Club</div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Cultural + Bar ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Alternativa 3</div>
           <div class="ref-name">Sala cultural de día · Bar nocturno</div>
           <div class="ref-desc">Piso 1: shows, exposiciones, charlas, clases magistrales. Piso 2: bar con propuesta curada. Define la identidad cultural del polo — el lugar al que se viene cuando hay algo que ver o escuchar.</div>
-          <div class="ref-ejemplos">Ref: Centro Cultural Konex, El Emergente</div>
         </div>
       </div>
     </div>
@@ -777,21 +790,29 @@
     <div class="ref-group-title">Bloque B — Restaurante existente</div>
     <div class="ref-grid">
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Restaurante Nocturno ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Ala 1</div>
           <div class="ref-name">Restaurante de alta cocina — noche</div>
           <div class="ref-desc">Alta calidad, ticket alto, experiencia diferenciada. Reserva previa. Carta que cambia con la estación. El destino gastronómico de Pilar para una noche especial.</div>
-          <div class="ref-ejemplos">Ref: Don Julio, Mishiguene, Narda Comedor</div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Bar Coctelería ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Ala 2</div>
           <div class="ref-name">Bar de alta coctelería</div>
           <div class="ref-desc">Bar con propuesta seria: coctelería de autor, carta de vinos natural, whisky selecto. Funciona como complemento del restaurante o como destino propio después de las 22h.</div>
-          <div class="ref-ejemplos">Ref: Florería Atlántico, Presidente Bar, Padre</div>
         </div>
       </div>
     </div>
@@ -802,12 +823,16 @@
     <div class="ref-group-title">Bloque C — Casita</div>
     <div class="ref-grid">
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Sushi / Omakase ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Concepto único</div>
           <div class="ref-name">Sushi / Omakase exclusivo</div>
           <div class="ref-desc">Muy pocas personas. Reserva previa obligatoria. El chef decide el menú. Experiencia íntima de ticket muy alto — el concepto más aspiracional del polo. Opera con lista de espera.</div>
-          <div class="ref-ejemplos">Ref: Crudo (La Aldea), Osaka, Uchi (Austin), Den (Tokyo)</div>
         </div>
       </div>
     </div>
@@ -818,30 +843,42 @@
     <div class="ref-group-title">Bloque D — Terreno Trasero</div>
     <div class="ref-grid">
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Wellness ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Alternativa 1</div>
           <div class="ref-name">Wellness center</div>
           <div class="ref-desc">Sauna, piletas heladas, baños de contraste, terapias de recuperación. El formato que más creció en Buenos Aires en 2024–25. Membership mensual + visitas individuales. Se convierte en amenity de las viviendas futuras del Bloque D.</div>
-          <div class="ref-ejemplos">Ref: Las Bóvedas Spa, Thermas, The Well (NYC)</div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Pádel ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Alternativa 2</div>
           <div class="ref-name">Canchas de pádel premium</div>
           <div class="ref-desc">2–4 canchas techadas. Pago por reserva + torneos + clases. El deporte con mayor crecimiento en Argentina, con altísima demanda en zona norte. Genera flujo diario y convierte al jugador en cliente del restaurante.</div>
-          <div class="ref-ejemplos">Ref: World Padel Center, Padel Club Nordelta</div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Huerta ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Complemento</div>
           <div class="ref-name">Huerta orgánica</div>
           <div class="ref-desc">Produce ingredientes para el restaurante y sirve como actividad de talleres. Muy bajo costo, alto valor de identidad: "la huerta que alimenta La Plantación" es parte del storytelling del polo.</div>
-          <div class="ref-ejemplos">Ref: La Huerta de Gaia, Granja Primavera</div>
         </div>
       </div>
     </div>
@@ -852,21 +889,29 @@
     <div class="ref-group-title">Bloque E — Uso general del lugar</div>
     <div class="ref-grid">
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Eventos Corporativos ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Uso 1</div>
           <div class="ref-name">Eventos corporativos</div>
           <div class="ref-desc">Predio completo para empresas: jornadas de team building, lanzamientos de producto, retiros ejecutivos. Espacio único en Pilar para este tipo de experiencias — sin competencia directa en el corredor.</div>
-          <div class="ref-ejemplos">Ref: La Rural, Costa Salguero reconfigurado</div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-img-placeholder">[ Imagen · Activaciones ]</div>
+        <div class="ref-photos">
+          <div class="ref-photo">foto 1</div>
+          <div class="ref-photo">foto 2</div>
+          <div class="ref-photo">foto 3</div>
+          <div class="ref-photo">foto 4</div>
+        </div>
         <div class="ref-body">
           <div class="ref-label">Uso 2</div>
           <div class="ref-name">Activaciones de marca y eventos privados</div>
           <div class="ref-desc">Pop-ups, lanzamientos de marca, casamientos, celebraciones de alto perfil. El predio como escenario: la naturaleza hace el trabajo visual. Operado con know-how de RAME en activaciones BTL.</div>
-          <div class="ref-ejemplos">Ref: Activaciones Chandon, Diageo Reserve, Malbec WA</div>
         </div>
       </div>
     </div>
